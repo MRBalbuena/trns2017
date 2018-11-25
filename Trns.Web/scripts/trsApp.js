@@ -1,6 +1,6 @@
 ﻿/// <reference path="knockout-3.4.0.debug.js" />
-/// <reference path="jquery-1.10.2.js" />
-/// <reference path="jquery-ui-1.11.4.js" />
+/// <reference path="jquery-3.3.1.js" />
+/// <reference path="jquery-ui-1.10.3.js" />
 /// <reference path="knockout-3.4.0.js" />
 
 var STATE_BLOCKED_BY = 'Phrase bloked by: ';
@@ -55,28 +55,41 @@ var ViewModel = function () {
         self.translation('');
         setMessage(STATE_NO_MESSAGE);
         self.selected(item);
-        self.selectedText(item.Text);
-        $.post('api/block', "=" + item.Id + "," + self.user()).done(function (result) {
-            var rowStyle = "active";
-            var btnStyle = "btn-default";
-            $("#save").removeAttr("diabled");
-            self.disabled(false);
-            $("#save").removeClass("btn-success");
-            $("#save").removeClass("btn-danger");
-            $("table td").removeClass();
-            if (result && result != self.user()) {
-                rowStyle = "danger";
-                btnStyle = "btn-danger";
-                setMessage(STATE_BLOCKED_BY, result);
-                $("#save").attr("diabled", "disabled");
-                self.disabled(true);
+        self.selectedText(item.text);
+        var data = {
+            id: item.id,
+            user: self.user()
+        };
+        $.ajax({
+            type: "POST",
+            url: "api/block",
+            data: JSON.stringify(data),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function (result) {
+                var rowStyle = "active";
+                var btnStyle = "btn-default";
+                $("#save").removeAttr("disabled");
+                self.disabled(false);
+                $("#save").removeClass("btn-success");
+                $("#save").removeClass("btn-danger");
+                $("table td").removeClass();
+                if (result && result != self.user()) {
+                    rowStyle = "danger";
+                    btnStyle = "btn-danger";
+                    setMessage(STATE_BLOCKED_BY, result);
+                    $("#save").attr("diabled", "disabled");
+                    self.disabled(true);
+                }
+                $("table td[id=" + item.Id + "]").attr("class", rowStyle);
+                $("#save").addClass(btnStyle);
             }
-            $("table td[id=" + item.Id + "]").attr("class", rowStyle);
-            $("#save").addClass(btnStyle);
-        });
+        });      
     };
     self.setSameText = function() {
-        self.translation(self.selected().Text);
+        self.translation(self.selected().text);
     }
     self.getMore = function () {
         self.rows = 30;
@@ -94,10 +107,10 @@ var ViewModel = function () {
             $("#save").addClass("btn-danger");
             return;
         }
-        self.selected().Spanish = self.translation();
-        if (!self.edition()) self.selected().TransBy = self.user();
-        if (self.edition()) self.selected().EditedBy = self.user();
-        self.selected().CheckedBy = null;
+        self.selected().spanish = self.translation();
+        if (!self.edition()) self.selected().transBy = self.user();
+        if (self.edition()) self.selected().editedBy = self.user();
+        self.selected().checkedBy = null;
         //console.log(self.selected());
         $.post('api/translation', self.selected()).done(function () {
             var getDefault = (self.rows === 10) ? true : false;
@@ -138,8 +151,8 @@ var ViewModel = function () {
             modal: true,
             buttons: {
                 'Confirm': function () {
-                    data.CheckedBy = self.user();
-                    data.CheckedTime = new Date().getTime();
+                    data.checkedBy = self.user();
+                    data.checkedTime = new Date().getTime();
                     $.post('api/translation', data).done(function () {
                         $('#tr_' + data.Id).addClass('success');
                         self.getStats();
@@ -157,10 +170,10 @@ var ViewModel = function () {
     };
     self.edit = function() {
         var item = this;
-        item.CheckedBy = null;
+        item.checkedBy = null;
         self.selected(item);
-        self.selectedText(item.Text);
-        self.translation(item.Spanish);
+        self.selectedText(item.text);
+        self.translation(item.spanish);
         self.disabled(false);
         self.edition(true);
     };

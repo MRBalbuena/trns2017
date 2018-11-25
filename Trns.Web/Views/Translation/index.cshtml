@@ -3,12 +3,12 @@
 <head>
     <title></title>
     <meta charset="utf-8" />
-    <link href="~/Scripts/Content/bootstrap.css" rel="stylesheet" />
-    <link href="~/Scripts/Content/jquery-ui.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="Stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/redmond/jquery-ui.css" />
     <script src="~/Scripts/knockout-3.4.0.js"></script>
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
-    <script src="~/Scripts/jquery-ui-1.11.4.js"></script>
-    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/jquery-ui.min.js"></script>
+    
     <script src="~/Scripts/trsApp.js"></script>
 </head>
 <body>
@@ -120,11 +120,11 @@
                             </div>
                         </td>
                     </tr>
-                    <tr data-bind="css: { success: CheckedBy !== null }, attr: {id: 'tr_' + id}">
+                    <tr data-bind="css: { success: checkedBy !== null }, attr: {id: 'tr_' + id}">
                         <td style="cursor: pointer; width: 100%">
                             <div class="row" style="width: 100%">
                                 <div class="col-md-10">
-                                    <span data-bind="text: Spanish" style="font-style: italic; font-weight: bold"></span>
+                                    <span data-bind="text: spanish" style="font-style: italic; font-weight: bold"></span>
                                 </div>
                                 <div class="col-md-1">
                                     <span data-bind="text: '(' + transBy + ')'" style="font-style: italic; font-weight: bold"></span>
@@ -134,7 +134,7 @@
                                         <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                     </button>
 
-                                    <button type="button" class="btn btn-default" aria-label="Left Align" data-bind="click: $root.check, visible: CheckedBy == null">
+                                    <button type="button" class="btn btn-default" aria-label="Left Align" data-bind="click: $root.check, visible: checkedBy == null">
                                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                                     </button>
                                 </div>

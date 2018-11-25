@@ -45,12 +45,12 @@ namespace Trns.Web.Controllers
 
         [HttpPost]
         [Route("api/block")]
-        public string block([FromBody] string data)
+        public string block([FromBody] Block data)
         {
-            if (string.IsNullOrEmpty(data)) return "no data available";
+            //if (string.IsNullOrEmpty(data)) return "no data available";
             //return "ok";
-            int id = Convert.ToInt32(data.Split((",").ToCharArray())[0]);
-            string user = data.Split((",").ToCharArray())[1];
+            int id = data.Id;
+            string user = data.User;
             return _translations.BlockPhrase(id, user);
         }
 
