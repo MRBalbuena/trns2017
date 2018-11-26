@@ -21,7 +21,7 @@ namespace Trns.Data
             var config = new ConfigurationBuilder();
             var path = Path.Combine(AppContext.BaseDirectory, "appsetings.json");
 
-            optionsBuilder.UseSqlServer("Server=MarceloRB\\SQLExpress;Database=TranslationsDev;Persist Security Info=True; User ID=omuser;Password=Onmove01;MultipleActiveResultSets=True");
+            optionsBuilder.UseSqlServer("Server=MarceloRB\\SQLExpress;Database=Translations;Persist Security Info=True; User ID=omuser;Password=Onmove01;MultipleActiveResultSets=True");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Translation\index.cshtml" />
+    <None Include="Views\Translation\Index.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -60,7 +60,7 @@ namespace Trns.Engine
             return "";
         }
 
-        public void SaveTranslation(Translation translation)
+        public bool SaveTranslation(Translation translation)
         {
             var phrase = _repo.Translations.Find(translation.Id);
             if (phrase != null)
@@ -76,8 +76,9 @@ namespace Trns.Engine
                 if (translation.EditedBy != null) phrase.EditedTime = DateTime.Now;
                 phrase.Comment = translation.Comment;
             }
-            _repo.Translations.Add(phrase);
+            _repo.Translations.Update(phrase);
             _repo.SaveChanges();
+            return true;
         }
 
         public IEnumerable<Translation> SearchByWord(string words)
@@ -92,7 +93,9 @@ namespace Trns.Engine
         public IEnumerable<Translation> GetUnchecked()
         {
             return _repo.Translations.ToList()
-                .Where(t => String.IsNullOrEmpty(t.CheckedBy) && t.Edition == "2018-11")
+                .Where(t => String.IsNullOrEmpty(t.CheckedBy) 
+                    && t.Spanish != null
+                    && t.Edition == "2018-11")
                 .Take(20);
         }
 

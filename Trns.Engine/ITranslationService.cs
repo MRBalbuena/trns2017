@@ -12,7 +12,7 @@ namespace Trns.Engine
         Translation GetPhrase(int id);
         Stats GetStats();
         string BlockPhrase(int id, string user);
-        void SaveTranslation(Translation translation);
+        bool SaveTranslation(Translation translation);
         IEnumerable<Translation> SearchByWord(string words);
         IEnumerable<Translation> GetUnchecked();
     }

@@ -39,11 +39,11 @@ var ViewModel = function () {
     };
     self.getStats = function() {
         $.getJSON('api/translation/stats', function (result) {
-            if (!isNaN(result.TranslationsPercent)) {
-                $('.progress-bar-info').attr('style', 'width: ' + result.TranslationsPercent.toFixed(2) + '%');
-                $('.progress-bar-info').attr('title', 'Phrases Translated: ' + result.Translated + ', (' + result.TranslationsPercent.toFixed(2) + '%)');
-                $('.progress-bar-success').attr('style', 'width: ' + result.CheckedPercent.toFixed(2) + '%');
-                $('.progress-bar-success').attr('title', 'Phrases Checked: ' + result.Checked + ', (' + result.CheckedPercent.toFixed(2) + '%)');
+            if (!isNaN(result.translationsPercent)) {
+                $('.progress-bar-info').attr('style', 'width: ' + result.translationsPercent.toFixed(2) + '%');
+                $('.progress-bar-info').attr('title', 'Phrases Translated: ' + result.translated + ', (' + result.translationsPercent.toFixed(2) + '%)');
+                $('.progress-bar-success').attr('style', 'width: ' + result.checkedPercent.toFixed(2) + '%');
+                $('.progress-bar-success').attr('title', 'Phrases Checked: ' + result.checked + ', (' + result.checkedPercent.toFixed(2) + '%)');
             }
         });
     }
@@ -112,12 +112,20 @@ var ViewModel = function () {
         if (self.edition()) self.selected().editedBy = self.user();
         self.selected().checkedBy = null;
         //console.log(self.selected());
-        $.post('api/translation', self.selected()).done(function () {
-            var getDefault = (self.rows === 10) ? true : false;
-            self.getTrs(getDefault);
-            self.edition(false);
-        }).fail(function (data) {
-
+        $.ajax({
+            type: "POST",
+            url: "api/translation/save",
+            data: JSON.stringify(self.selected()),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            success: function () {
+                //$.post('api/translation/save', self.selected()).done(function () {
+                var getDefault = (self.rows === 10) ? true : false;
+                self.getTrs(getDefault);
+                self.edition(false);
+            }
         });
         $("#save").removeClass("btn-default").removeClass("btn-danger");
         $("#save").addClass("btn-success");
@@ -153,11 +161,19 @@ var ViewModel = function () {
                 'Confirm': function () {
                     data.checkedBy = self.user();
                     data.checkedTime = new Date().getTime();
-                    $.post('api/translation', data).done(function () {
-                        $('#tr_' + data.Id).addClass('success');
-                        self.getStats();
-                    }).fail(function (data) {
-
+                    //$.post('api/translation', data).done(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "api/translation/save",
+                        data: JSON.stringify(self.selected()),
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        success: function () {
+                            $('#tr_' + data.Id).addClass('success');
+                            self.getStats();
+                        }
                     });
                     $(this).dialog('close');
                 },

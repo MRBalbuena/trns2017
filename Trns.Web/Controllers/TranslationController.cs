@@ -54,9 +54,11 @@ namespace Trns.Web.Controllers
             return _translations.BlockPhrase(id, user);
         }
 
-        public void Post(Translation translation)
+        [HttpPost]
+        [Route("api/translation/save")]
+        public IActionResult Post([FromBody]Translation translation)
         {
-            _translations.SaveTranslation(translation);
+            return  Ok(_translations.SaveTranslation(translation));
         }
 
         [HttpGet]
