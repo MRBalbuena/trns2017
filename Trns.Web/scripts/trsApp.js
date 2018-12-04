@@ -27,7 +27,7 @@ var ViewModel = function () {
         self.userIsValid(valid);
     }
     self.userIsValid = ko.observable(false);
-    self.getTrs = function (getDefault) {        
+    self.getTrs = function (getDefault) {
         //var url = (typeof rows == 'undefined') ? 'api/translation/0' : 'api/translation/' + rows;
         var url = getDefault ? 'api/translation/get' : 'api/translation/getMore';
         return $.getJSON(url, function (result) {
@@ -35,9 +35,9 @@ var ViewModel = function () {
             self.selectedText("");
             self.translation("");
             self.getStats();
-        });        
+        });
     };
-    self.getStats = function() {
+    self.getStats = function () {
         $.getJSON('api/translation/stats', function (result) {
             if (!isNaN(result.translationsPercent)) {
                 $('.progress-bar-info').attr('style', 'width: ' + result.translationsPercent.toFixed(2) + '%');
@@ -86,9 +86,9 @@ var ViewModel = function () {
                 $("table td[id=" + item.Id + "]").attr("class", rowStyle);
                 $("#save").addClass(btnStyle);
             }
-        });      
+        });
     };
-    self.setSameText = function() {
+    self.setSameText = function () {
         self.translation(self.selected().text);
     }
     self.getMore = function () {
@@ -137,8 +137,7 @@ var ViewModel = function () {
     self.displaySearchResult = ko.observable(false);
     self.wordFilter = ko.observable('');
     self.getSearch = function () {
-        if(self.wordFilter())        
-        {
+        if (self.wordFilter()) {
             $.getJSON('api/translation/searchByWords', 'words=' + self.wordFilter(), function (result) {
                 self.searchResult(result);
                 self.displaySearchResult(true);
@@ -148,43 +147,28 @@ var ViewModel = function () {
             self.displaySearchResult(false);
         }
     };
+  
     self.check = function () {
         var data = this;
-        $('#dialog-check')
-        .data('data', 'data')
-        .dialog({
-            resizable: false,
-            height: 200,
-            width: 400,
-            modal: true,
-            buttons: {
-                'Confirm': function () {
-                    data.checkedBy = self.user();
-                    data.checkedTime = new Date().getTime();
-                    //$.post('api/translation', data).done(function () {
-                    $.ajax({
-                        type: "POST",
-                        url: "api/translation/save",
-                        data: JSON.stringify(self.selected()),
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        success: function () {
-                            $('#tr_' + data.Id).addClass('success');
-                            self.getStats();
-                        }
-                    });
-                    $(this).dialog('close');
+        data.checkedBy = self.user();        
+        var r = confirm("This Translation is going to be set as checked by you. Are you sure?");
+        if (r === true) {            
+            $.ajax({
+                type: "POST",
+                url: "api/translation/save",
+                data: JSON.stringify(data),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                Cancel: function() {
-                    $(this).dialog('close');
-
+                success: function () {
+                    $('#tr_' + data.id).addClass('success');
+                    self.getStats();
                 }
-            }
-        });
+            });
+        };
     };
-    self.edit = function() {
+    self.edit = function () {
         var item = this;
         item.checkedBy = null;
         self.selected(item);
@@ -194,7 +178,7 @@ var ViewModel = function () {
         self.edition(true);
     };
     self.edition = ko.observable(false);
-    self.getUnchecked = function() {
+    self.getUnchecked = function () {
         $.getJSON('api/translation/unchecked', function (result) {
             self.searchResult(result);
             self.displaySearchResult(true);
@@ -214,6 +198,6 @@ var ViewModel = function () {
 $(function () {
     var vm = new ViewModel();
     ko.applyBindings(vm);
-    vm.getUsers();    
+    vm.getUsers();
     $('#userName').focus();
 });

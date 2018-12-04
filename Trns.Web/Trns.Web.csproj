@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Views\Translation\index.cshtml" />
+    <Content Remove="Views\Translation\Index_0.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Views\Translation\Index.cshtml" />
+    <None Include="Views\Translation\Index_0.cshtml" />
   </ItemGroup>
 
 </Project>
