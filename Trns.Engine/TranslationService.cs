@@ -18,7 +18,7 @@ namespace Trns.Engine
         public IEnumerable<Translation> GetTopToTranslate(int top)
         {
             var translations = _repo.Translations
-                .Where(t => t.Spanish == null && t.Edition == "2018-11")
+                .Where(t => t.Spanish == null && t.Edition == "2019-07")
                 .Take(top)
                 .OrderBy(t => t.Id)
                 .ToList();
@@ -35,9 +35,9 @@ namespace Trns.Engine
 
         public Stats GetStats()
         {
-            var tot = _repo.Translations.Where(t => t.Edition == "2018-11").Count();
-            double translated = _repo.Translations.Where(t => t.Edition == "2018-11").Count(t => !string.IsNullOrEmpty(t.Spanish));
-            double transChecked = _repo.Translations.Where(t => t.Edition == "2018-11").Count(t => !string.IsNullOrEmpty(t.CheckedBy));
+            var tot = _repo.Translations.Where(t => t.Edition == "2019-07").Count();
+            double translated = _repo.Translations.Where(t => t.Edition == "2019-07").Count(t => !string.IsNullOrEmpty(t.Spanish));
+            double transChecked = _repo.Translations.Where(t => t.Edition == "2019-07").Count(t => !string.IsNullOrEmpty(t.CheckedBy));
             return new Stats
             {
                 Checked = Convert.ToInt32(transChecked),
@@ -95,7 +95,7 @@ namespace Trns.Engine
             return _repo.Translations.ToList()
                 .Where(t => String.IsNullOrEmpty(t.CheckedBy) 
                     && t.Spanish != null
-                    && t.Edition == "2018-11")
+                    && t.Edition == "2019-07")
                 .Take(20);
         }
 
